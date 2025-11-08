@@ -2,20 +2,24 @@ import sunny from "../assets/images/sunny.png";
 import cloudy from "../assets/images/cloudy.png";
 import rainy from "../assets/images/rainy.png";
 import snowy from "../assets/images/snowy.png";
+import loadingGif from "../assets/images/loading.gif";
 import { useState, useEffect } from "react";
 
 const WeatherApp = () => {
   const [data, setData] = useState({});
   const [location, setLocation] = useState("");
+  const [loading, setLoading] = useState(false);
   const api_key = "e46d7aa59b3904b95690e6c143bc2c4d";
 
   useEffect(() => {
     const fetchDefaultWeather = async () => {
+      setLoading(true);
       const defaultLocation = "Belgrade";
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${defaultLocation}&appid=${api_key}&units=metric`;
       const response = await fetch(url);
       const defaultData = await response.json();
       setData(defaultData);
+      setLoading(false);
     };
 
     fetchDefaultWeather();
@@ -30,9 +34,13 @@ const WeatherApp = () => {
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${api_key}&units=metric`;
       const response = await fetch(url);
       const searchData = await response.json();
-      console.log(searchData);
-      setData(searchData);
-      setLocation("");
+      if (searchData.cod !== "200") {
+        setData({ notFound: true });
+      } else {
+        setData(searchData);
+        setLocation("");
+      }
+      setLoading(false);
     }
   };
 
@@ -120,9 +128,13 @@ const WeatherApp = () => {
             <i className="fa-solid fa-magnifying-glass" onClick={search}></i>
           </div>
         </div>
-
+        {loading ? (
+          <img className="loader" src={loadingGif} alt="loading" />
+        ) : data.notFound ? (
+          <div className="not-found">Location not found </div>
+        ) : null}
         <div className="weather">
-          <img src={weatherImage} alt="sunny" />
+          <img src={weatherImage} />
           <div className="weather-type">
             {data.weather ? data.weather[0].main : null}
           </div>

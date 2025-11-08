@@ -8,9 +8,16 @@
   overflow: hidden;
 }
 
+.loader {
+  width: 10rem;
+  height: 10rem;
+  margin-top: 10rem;
+}
+
 .weather img {
   margin-top: -9rem;
   /* display: none; */
+  alt: none;
 }
 .weather-app {
   width: 35rem;
@@ -81,6 +88,13 @@
   font-size: 1.5rem;
   color: #2f2e57;
   cursor: pointer;
+}
+
+.not-found {
+  font-size: 3rem;
+  color: #484569;
+  margin-top: 5rem;
+  text-shadow: -0.3rem 0.5rem 1rem rgba(0, 0, 0, 0.2);
 }
 
 .weather-type {
